@@ -17,7 +17,7 @@ This method was added in version [% version %] of the module.
 
 =head1 NAME
 
-[% info.colon %] - abstract here.
+[% info.colon %] - check web page link rot
 
 =head1 SYNOPSIS
 
@@ -31,6 +31,84 @@ corresponding to L<git commit [% commit.commit %]|[% info.repo
 
 =head1 DESCRIPTION
 
+Scan HTML pages for links, try to access the links, and make a report.
+
+The HTML files need to be in UTF-8 encoding.
+
 =head1 FUNCTIONS
+
+=head2 check_links
+
+    check_links ($links);
+
+Check the links returned by L</get_links> and write to a JSON file specified by the C<out> option.
+
+    check_links ($links, out => "link-statuses.json");
+
+=head2 get_links
+
+    my $links = get_links (\@files);
+
+Given a list of HTML files in C<@files>, extract all the links from
+it. The return value C<$links> contains a hash reference whose keys
+are the links and whose values are array references containing a list
+of all the files of C<@files> which contain the link.
+
+=head2 html_report
+
+    html_report
+
+Write an HTML report using the JSON output by L</get_links>.
+
+=head2 replace
+
+    replace (\%links, @files);
+
+Make a regex of links with 30* statuses and new locations, then go
+through @files and replace them with the new locations.
+
+
+=head1 DEPENDENCIES
+
+=over
+
+=item L<LWP::UserAgent>
+
+=item L<HTML::Make>
+
+This is used to make the HTML report about the links.
+
+=item L<HTML::Make::Page>
+
+This is used to make the HTML report about the links.
+
+=item L<JSON::Parse>
+
+=item L<JSON::Create>
+
+This is used to make the report file about the links.
+
+=item L<Trav::Dir>
+
+This is used to traverse the directory of HTML files.
+
+=item L<File::Slurper>
+
+This is used for reading and writing files.
+
+=item L<Convert::Moji>
+
+=back
+
+=head1 SEE ALSO
+
+=head2 CPAN
+
+=over
+
+=item L<HTTP::SimpleLinkChecker>
+
+=back
+
 
 [% INCLUDE "author" %]

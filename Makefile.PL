@@ -13,6 +13,13 @@ WriteMakefile (
     AUTHOR => 'Ben Bullock <bkb@cpan.org>',
     LICENSE => 'perl',
     PREREQ_PM => {
+	'LWP::UserAgent' => '6.53',
+	'HTML::Make' => '0.05',
+	'HTML::Make::Page' => '0.01',
+	'File::Slurper' => '0.012',
+	'JSON::Create' => '0.32',
+	'JSON::Parse' => '0.61',
+	'Convert::Moji' => '0.10',
     },
     META_MERGE => {
 	'meta-spec' => {
