@@ -41,7 +41,8 @@ The HTML files need to be in UTF-8 encoding.
 
     check_links ($links);
 
-Check the links returned by L</get_links> and write to a JSON file specified by the C<out> option.
+Check the links returned by L</get_links> and write to a JSON file
+specified by the C<out> option.
 
     check_links ($links, out => "link-statuses.json");
 
@@ -56,23 +57,25 @@ of all the files of C<@files> which contain the link.
 
 =head2 html_report
 
-    html_report (in => 'link-statuses.json', 
+    html_report (in => 'link-statuses.json', out => 'report.html');
 
 Write an HTML report using the JSON output by L</get_links>.
 
 =head2 replace
 
-    replace (\%links, @files);
+    replace (\%links, \@files);
 
-Make a regex of links with 30* statuses and new locations, then go
-through @files and replace them with the new locations.
-
+Make a regex of links with C<30*> statuses (301, 302) which also have
+new locations, then go through C<@files> and replace them with the new
+locations.
 
 =head1 DEPENDENCIES
 
 =over
 
 =item L<LWP::UserAgent>
+
+This is used to fetch the files.
 
 =item L<HTML::Make>
 
@@ -88,15 +91,13 @@ This is used to make the HTML report about the links.
 
 This is used to make the report file about the links.
 
-=item L<Trav::Dir>
-
-This is used to traverse the directory of HTML files.
-
 =item L<File::Slurper>
 
 This is used for reading and writing files.
 
 =item L<Convert::Moji>
+
+This is used to make the regex used by L</replace>.
 
 =back
 
