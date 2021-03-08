@@ -195,14 +195,14 @@ sub replace
     my ($links, $files) = @_;
     my @moved;
     for my $l (keys %$links) {
-	print "$l\n";
+#	print "$l\n";
 	my $link = $links->{$l};
 	if ($link->{status} =~ m!^30! && $link->{location}) {
 	    push @moved, $l;
-	    print "$l\n";
+#	    print "$l\n";
 	}
     }
-    print "@moved\n";
+#    print "@moved\n";
     my $re = make_regex (@moved);
 #    print "$re\n";
     for my $file (@$files) {
