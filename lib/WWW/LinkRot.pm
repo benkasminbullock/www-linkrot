@@ -111,9 +111,18 @@ sub html_report
     if (! $title) {
 	$title = 'WWW::LinkRot link report';
     }
+    my $style = <<EOF;
+.error {
+    background: gold;
+}
+
+.moved {
+    background: pink;
+}
+EOF
     my ($html, $body) = make_page (
 	title => $title,
-	css => ['www-linkrot.css'],
+	style => $style,
     );
     $body->push ('h1', text => $title);
     my $table = $body->push ('table');
@@ -177,6 +186,9 @@ sub html_report
 		$filen++;
 		if ($filen > $maxfiles) {
 		    last;
+		}
+		if ($options{strip}) {
+		    $file =~ s!$options{strip}!!;
 		}
 		my $href = "$options{url}/$file";
 		$files->push (
