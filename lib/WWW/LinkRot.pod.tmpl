@@ -31,9 +31,31 @@ corresponding to L<git commit [% commit.commit %]|[% info.repo
 
 =head1 DESCRIPTION
 
-Scan HTML pages for links, try to access the links, and make a report.
+Scan HTML files for links, try to access the links, and make a report.
 
 The HTML files need to be in UTF-8 encoding.
+
+This module is intended for people who run web sites to run, for
+example, periodic checks over a large number of HTML files to find all
+of the external links in those files, then given that list of links,
+test each link to make sure that it is actually valid.
+
+The reading function is L</get_links> which works on a list containing
+file names such as might be created by a module like L<Trav::Dir> or
+L<File::Find>. It looks for any C<https?://> links in the files and
+makes a list.
+
+The list of links may then be checked for validity using
+L</check_links> which runs the C<get> method of L</LWP::UserAgent> on
+them and stores the status. This outputs a JSON file containing the
+link, the status, the location, and the files which contain the link.
+
+The function L</html_report> generates an HTML representation of the
+JSON file.
+
+The function L</replace> is a batch editing function which inputs a
+list of links and a list of files, then substitutes the redirected
+links (the ones with status 301 or 302) with their replacement.
 
 =head1 FUNCTIONS
 
@@ -45,6 +67,24 @@ Check the links returned by L</get_links> and write to a JSON file
 specified by the C<out> option.
 
     check_links ($links, out => "link-statuses.json");
+
+Usually one would filter the links returned by L</get_links> to remove
+things like internal links.
+
+=head3 Options
+
+=over
+
+=item nook
+
+If this is set to a true value, before running the link checks, check_links reads in a previous copy of the file specified by the C<out> option, and if the status is C<200> for that link, it doesn't try to access again but assumes it is still OK.
+
+This option is useful for the case when one has recently run the job
+and then done work on fixing the dead links or moved links, then wants
+to check whether the errors were fixed, without checking that all of
+the pages are still OK.
+
+=back
 
 =head2 get_links
 
@@ -73,9 +113,13 @@ locations.
 
 =over
 
-=item L<LWP::UserAgent>
+=item L<Convert::Moji>
 
-This is used to fetch the files.
+This is used to make the regex used by L</replace>.
+
+=item L<File::Slurper>
+
+This is used for reading and writing files.
 
 =item L<HTML::Make>
 
@@ -87,17 +131,15 @@ This is used to make the HTML report about the links.
 
 =item L<JSON::Parse>
 
+This is used to read back the JSON.
+
 =item L<JSON::Create>
 
 This is used to make the report file about the links.
 
-=item L<File::Slurper>
+=item L<LWP::UserAgent>
 
-This is used for reading and writing files.
-
-=item L<Convert::Moji>
-
-This is used to make the regex used by L</replace>.
+This is used to fetch the files.
 
 =back
 
@@ -107,9 +149,26 @@ This is used to make the regex used by L</replace>.
 
 =over
 
+=item L<HTML::LinkExtor>
+
 =item L<HTTP::SimpleLinkChecker>
 
+=item L<WebFetch>
+
 =item L<W3C::LinkChecker>
+
+=item L<WWW::LinkChecker::Internal>
+
+=back
+
+=head2 Other
+
+=over
+
+=item L<Xenu's link sleuth|https://en.wikipedia.org/wiki/Xenu%27s_Link_Sleuth>
+
+We used this more than ten years ago, it seemed to work very well. It
+hasn't been updated in ten years though.
 
 =back
 

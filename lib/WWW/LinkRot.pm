@@ -71,16 +71,16 @@ sub check_links
     my $count = 0;
     my @checks;
     for my $link (sort keys %$links) {
-    if ($nook) {
-	if ($skip{$link}) {
-	    if ($verbose) {
-		print "$link was OK last time, skipping\n";
+	if ($nook) {
+	    if ($skip{$link}) {
+		if ($verbose) {
+		    print "$link was OK last time, skipping\n";
+		}
+		# Keep a copy of this link in the output.
+		push @checks, $skip{$link};
+		next;
 	    }
-	    # Keep a copy of this link in the output.
-	    push @checks, $skip{$link};
-	    next;
 	}
-    }
 	my %r = (
 	    link => $link,
 	    files => $links->{$link},
