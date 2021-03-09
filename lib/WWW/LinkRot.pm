@@ -204,27 +204,31 @@ EOF
 
 sub replace
 {
-    my ($links, $files) = @_;
+    my ($links, $files, %options) = @_;
+    my $verbose = $options{verbose};
     my @moved;
     for my $l (keys %$links) {
-#	print "$l\n";
 	my $link = $links->{$l};
 	if ($link->{status} =~ m!^30! && $link->{location}) {
 	    push @moved, $l;
-#	    print "$l\n";
+	    if ($verbose) {
+		print "Link '$l' to be edited.\n";
+	    }
 	}
     }
-#    print "@moved\n";
     my $re = make_regex (@moved);
-#    print "$re\n";
     for my $file (@$files) {
 	my $text = read_text ($file);
 	if ($text =~ s!($re)!$links->{$1}{location}!g) {
-	    print "$file changed $1 $links->{$1}{location}\n";
+	    if ($verbose) {
+		print "Some links in '$file' changed.\n";
+	    }
 	    write_text ($file, $text);
 	}
 	else {
-#	    print "$file unchanged\n";
+	    if ($verbose) {
+		print "'$file' is unchanged, not writing.\n";
+	    }
 	}
     }
 }
