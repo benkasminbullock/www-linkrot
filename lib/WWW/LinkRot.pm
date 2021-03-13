@@ -48,6 +48,9 @@ sub get_links
 sub check_links
 {
     my ($links, %options) = @_;
+    if (! $links || ref $links ne 'HASH') {
+	carp "Usage: check_links (\%links, %options)";
+    }
     my $out = $options{out};
     my $verbose = $options{verbose};
     my $nook = $options{nook};
@@ -190,7 +193,13 @@ EOF
 		if ($options{strip}) {
 		    $file =~ s!$options{strip}!!;
 		}
-		my $href = "$options{url}/$file";
+		my $href;
+		if ($options{url}) {
+		    $href = "$options{url}/$file";
+		}
+		else {
+		    $href = $file;
+		}
 		$files->push (
 		    'a',
 		    attr => {target => '_blank', href => $href},
