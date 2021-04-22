@@ -22,7 +22,7 @@ use JSON::Create 'write_json';
 use JSON::Parse 'read_json';
 use Convert::Moji 'make_regex';
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub get_links
 {
@@ -175,6 +175,9 @@ EOF
 		    $statcell->push ('a', href => $loc, text => $loc);
 		}
 	    }
+	}
+	if ($options{nofiles}) {
+	    next;
 	}
 	my $files = $row->push ('td');
 	my $filelist = $xlink->{files};
