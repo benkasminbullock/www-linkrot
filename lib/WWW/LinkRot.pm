@@ -140,10 +140,7 @@ EOF
 	}
 	my $row = $table->push ('tr', class => $class,);
 	my $link = $row->push ('td');
-	my $text = $xlink->{link};
-	if (length ($text) > 100) {
-	    $text = substr ($text, 0, 100);
-	}
+	my $text = _shorten ($xlink->{link});
 	my $h = $xlink->{link};
 	$link->push (
 	    'a',
@@ -160,7 +157,7 @@ EOF
 		href => $archive,
 		target => '_blank',
 	    },
-	    text => '[archive]',
+	    text => '[ar]',
 	);
 	my $statcell = $row->push ('td', text => $xlink->{status});
 	if ($class eq 'moved') {
@@ -172,7 +169,7 @@ EOF
 		    $statcell->add_text (' (HTTPS)');
 		}
 		else {
-		    $statcell->push ('a', href => $loc, text => $loc);
+		    $statcell->push ('a', href => $loc, text => _shorten($loc, 50));
 		}
 	    }
 	}
@@ -180,7 +177,7 @@ EOF
 	    next;
 	}
 	my $files = $row->push ('td');
-	my $filelist = $xlink->{files};
+	my $filelist = $xlink->{files};	
 	if ($filelist) {
 	    my $nfiles = scalar (@$filelist);
 	    my $maxfiles = $nfiles;
@@ -243,6 +240,17 @@ sub replace
 	    }
 	}
     }
+}
+
+sub _shorten {
+    my ($text, $max) = @_;
+    if (! $max) {
+	$max = 100;
+    }
+    if (length ($text) > $max) {
+	$text = substr ($text, 0, $max);
+    }
+    return $text;
 }
 
 1;
