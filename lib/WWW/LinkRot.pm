@@ -119,6 +119,10 @@ sub html_report
     background: gold;
 }
 
+.forbidden {
+    background: orchid;
+}
+
 .moved {
     background: pink;
 }
@@ -134,6 +138,9 @@ EOF
 	my $class = 'OK';
 	if ($status =~ /30.*/) {
 	    $class = 'moved';
+	}
+	elsif ($status =~ /^403/) {
+	    $class = 'forbidden';
 	}
 	elsif ($status =~ /^[45].*/) {
 	    $class = 'error';
