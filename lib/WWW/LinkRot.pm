@@ -21,8 +21,10 @@ use File::Slurper qw!read_text write_text!;
 use JSON::Create 'write_json';
 use JSON::Parse 'read_json';
 use Convert::Moji 'make_regex';
-
 our $VERSION = '0.02';
+
+# Stop "header line too long" errors.
+push(@LWP::Protocol::http::EXTRA_SOCK_OPTS, MaxLineLength => 0);
 
 sub get_links
 {
